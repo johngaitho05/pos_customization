@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_partner_form_inh" model="ir.ui.view">
+            <field name="name">res.partner.form.inh</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="assurance_info" string="Assurance Details"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="res_partner_assurance_info_form" model="ir.ui.view">
+            <field name="name">assurance.info.form</field>
+            <field name="model">assurance.info</field>
+            <field name="arch" type="xml">
+                <form string="Assurance Details Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="principal_relationship"/>
+                                <field name="principal_id" placeholder="Principal's card number" attrs="{'invisible': [('principal_relationship', '=', 'owner')],'required': [('principal_relationship', '!=', 'owner')]}"  options="{'no_create_edit': True,&quot;no_open&quot;: True}"/>
+                                <field name="card_number" placeholder="Principal's card number" attrs="{'invisible': [('principal_relationship', '!=', 'owner')]}"/>
+                                <field name="card_number" placeholder="Dependant card number" attrs="{'invisible': [('principal_relationship', '=', 'owner')]}"/>
+                                <field name="patient_name" string="Principal Name" placeholder="principal's name" attrs="{'invisible': [('principal_relationship', '!=', 'owner')]}"/>
+                                <field name="patient_name" string="Dependant Name" placeholder="Name of the dependant" attrs="{'invisible': [('principal_relationship', '=', 'owner')]}"/>
+                                <field name="relationship_number" attrs="{'invisible': [('principal_relationship', '=', 'owner')],'required': [('principal_relationship', '!=', 'owner')]}"/>
+                               <field name="assurance_company" attrs="{'invisible': [('principal_relationship', '!=', 'owner')]}"/>
+                                <field name="client_contribution" attrs="{'invisible': [('principal_relationship', '!=', 'owner')]}"/>
+                            </group>
+                            <group>
+                                <field name="card_validity" attrs="{'invisible': [('principal_relationship', '!=', 'owner')]}"/>
+                                <field name="employer" attrs="{'invisible': [('principal_relationship', '!=', 'owner')]}"/>
+                                <field name="principal_name" attrs="{'invisible': [('principal_relationship', '=', 'owner')]}"/>
+                                <field name="principal_assurance_company" attrs="{'invisible': [('principal_relationship', '=', 'owner')]}"/>
+                                <field name="principal_card_validity" attrs="{'invisible': [('principal_relationship', '=', 'owner')]}"/>
+                                <field name="principal_employer" attrs="{'invisible': [('principal_relationship', '=', 'owner')]}"/>
+                                <field name="principal_client_contribution" attrs="{'invisible':[('principal_relationship', '=', 'owner')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

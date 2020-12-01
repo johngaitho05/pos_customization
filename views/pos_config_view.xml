@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="pos_config_rssd_card">
+            <field name="name">pos.config.rssd.card</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='inventory_location']" position="after">
+                    <h2>RSSB Card</h2>
+                    <div class="row mt16 o_settings_container" id="rssd_card">
+                        <div class="col-12 col-lg-6 o_setting_box" id="iface_rssd_card">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_rssb_card"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_rssb_card"/>
+                                <div class="text-muted" id="lable_rssd_card">
+                                   Enable to use RSSB Card in POS Interface.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,53 @@
+.pos{
+	.rssb_card input {
+		width: 100%;
+		margin-top: 10px;
+	}
+	.paymentline .col-insurance {
+		font-size: 16px;
+	}
+	.dependant-detail.hidden,.principal-detail.hidden{
+		display: none;
+	}
+	input:read-only,input:read-only:hover,input:read-only:active{
+		background: #f0eeee !important;
+		border:none !important;
+		width:fit-content;
+	}
+	input:read-only::placeholder{
+		content: none !important;
+	}
+	.principal-validator{
+		.hidden{
+			display: none;
+		}
+		.fa-times{
+			color: #dc2b2b;
+		}
+		.fa-check{
+			color:forestgreen;
+		}
+	}
+
+	.clientlist-screen .client-detail > .label{
+		color: #1d1d1d;
+		font-size: 13px;
+		min-width: 100px;
+		width:fit-content;
+	}
+	.assurance-details{
+		padding: .5em;
+		border: 1px solid #cecbcb;
+		width:fit-content !important;
+	}
+	.save-assurance{
+		button{
+			font-size: .8em;
+			color:#ffffff;
+			background-color: #7C7BAD;
+			border-color: #7C7BAD;
+			display: block;
+			margin-left: auto;
+		}
+	}
+}

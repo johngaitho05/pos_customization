@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="ClientDetailsEdit">
+        <t t-jquery="div.client-details-left" t-operation="replace">
+            <div class='client-details-left'>
+                <div class='client-detail'>
+                    <span class='label'>Relationship</span>
+                    <select class='detail client-relationship needsclick' name='principal_relationship'>
+                        <option value='owner' t-att-selected="partner.principal_relationship ? (('owner' === partner.principal_relationship) ? true : undefined) : undefined">Owner</option>
+                        <option value='spouse' t-att-selected="partner.principal_relationship ? (('spouse' === partner.principal_relationship) ? true : undefined) : undefined">Spouse</option>
+                        <option value='child' t-att-selected="partner.principal_relationship ? (('child' === partner.principal_relationship) ? true : undefined) : undefined">Child</option>
+                    </select>
+                </div>
+                <t t-if="partner.client_relationship !== 'owner'">
+                <div class='client-detail dependant-detail'>
+                    <span class='label'>Affiliation No</span>
+                    <input class='detail client-principal' name='principal_id' t-att-value='partner.affiliation_number || ""' placeholder='Principal card number' required="1"/>
+                    <span class="principal-validator"><i class="fa fa-times hidden"></i> <i class="fa fa-check hidden"></i></span>
+                </div>
+                </t>
+                <div class='client-detail'>
+                    <span class='label'>Card Number</span>
+                    <input class='detail client-number' name='card_number' t-att-value='partner.card_number || ""'></input>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Assured Name</span>
+                    <input class='detail client-patient' name='patient_name' t-att-value='partner.patient_name || ""' placeholder='Name on card'/>
+                </div>
+                <div class='client-detail dependant-detail'>
+                    <span class='label'>Relationship No</span>
+                    <input class='detail client-relationship-number' name='relationship_number' t-att-value='partner.relationship_number || ""' placeholder='Dependant relationship no. e.g 1'/>
+                </div>
+                <div class='client-detail dependant-detail'>
+                    <span class='label'>Principal</span>
+                    <span class="dependant-detail client-principal"><t t-esc='partner.principal_name || ""'/></span>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Company</span>
+                    <select class='detail client-company needsclick principal-detail' name='assurance_company'>
+                        <option value=''>None</option>
+                        <t t-foreach='widget.pos.assurance_company' t-as='company'>
+                            <option t-att-value='company.id' t-att-selected="partner.assurance_company ? ((company.id === partner.assurance_company[0]) ? true : undefined) : undefined">
+                                <t t-esc='company.name'/>
+                            </option>
+                        </t>
+                    </select>
+
+                    <span class="dependant-detail client-company">
+                            <t t-if="partner and partner.principal_assurance_company">
+                            <t t-esc='partner.principal_assurance_company[1] || ""'/>
+                            </t>
+                    </span>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Contribution</span>
+                    <input class='detail client-contribution principal-detail' name='client_contribution' t-att-value='partner.client_contribution || ""' placeholder='Assurance Contribution (%)'/>
+                    <span class="dependant-detail client-contribution"><t t-esc='partner.principal_client_contribution || ""'/></span>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Validity</span>
+                    <input type='date' class='detail client-validity principal-detail' name='card_validity' t-att-value='partner.card_validity || ""' placeholder='Expiry Date'/>
+                    <span class="dependant-detail client-validity"><t t-esc='partner.principal_card_validity or ""'/></span>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Employer</span>
+                    <input class='detail client-employer principal-detail' name='employer' t-att-value='partner.employer || ""'/>
+                    <span class="dependant-detail client-employer"><t t-esc='partner.principal_employer or ""'/></span>
+                </div>
+            </div>
+        </t>
+        <t t-jquery="div.client-details-right" t-operation="prepend">
+            <div class='client-detail'>
+                <span class='label'>Street</span>
+                <input class='detail client-address-street' name='street' t-att-value='partner.street || ""' placeholder='Street'></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>City</span>
+                <input class='detail client-address-city' name='city' t-att-value='partner.city || ""' placeholder='City'></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>Postcode</span>
+                <input class='detail client-address-zip' name='zip' t-att-value='partner.zip || ""' placeholder='ZIP'></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>State</span>
+                <select class='detail client-address-states needsclick' name='state_id'>
+                    <option value=''>None</option>
+                    <t t-foreach='widget.pos.states' t-as='state'>
+                        <option t-if="partner.country_id[0] == state.country_id[0]" t-att-value='state.id'
+                                t-att-selected="partner.state_id ? ((state.id === partner.state_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='state.name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>Country</span>
+                <select class='detail client-address-country needsclick' name='country_id'>
+                    <option value=''>None</option>
+                    <t t-foreach='widget.pos.countries' t-as='country'>
+                        <option t-att-value='country.id' t-att-selected="partner.country_id ? ((country.id === partner.country_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='country.name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left" t-operation="replace">
+            <div class='client-details-left'>
+                <div class='client-detail'>
+                    <span class='label'>Relationship</span>
+                    <t t-if='partner.principal_relationship'>
+                        <span class='detail client-relationship'><t t-esc='partner.principal_relationship' /></span>
+                    </t>
+                    <t t-if='!partner.principal_relationship'>
+                        <span class='detail client-relationship empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail dependant-detail'>
+                    <span class='label'>Principal</span>
+                    <t t-if='partner.affiliation_number'>
+                        <span class='detail client-principal'><t t-esc='partner.affiliation_number' /></span>
+                    </t>
+                    <t t-if='!partner.affiliation_number'>
+                        <span class='detail client-principal empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Card Number</span>
+                    <t t-if='partner.card_number'>
+                        <span class='detail client-number'><t t-esc='partner.card_number' /></span>
+                    </t>
+                    <t t-if='!partner.card_number'>
+                        <span class='detail client-affiliation empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Assured Name</span>
+                    <t t-if='partner.patient_name'>
+                        <span class='detail client-patient'><t t-esc='partner.patient_name' /></span>
+                    </t>
+                    <t t-if='!partner.patient_name'>
+                        <span class='detail client-patient empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail dependant-detail'>
+                    <span class='label'>Relationship No</span>
+                    <t t-if='partner.relationship_number || partner.relationship_number == 0'>
+                        <span class='detail client-relationship-number'><t t-esc='partner.relationship_number' /></span>
+                    </t>
+                    <t t-else=''>
+                        <span class='detail client-affiliation empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Company</span>
+                    <t t-if='partner.assurance_company || partner.principal_assurance_company'>
+                        <span class=''><t t-esc='partner.assurance_company[1] || partner.principal_assurance_company[1]'/></span>
+                    </t>
+                    <t t-else=''>
+                        <span class='detail client-company empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Contribution (%)</span>
+                    <t t-if='partner.client_contribution || partner.principal_client_contribution'>
+                        <span class='detail client-contribution'><t t-esc='partner.client_contribution || partner.principal_client_contribution' /></span>
+                    </t>
+                    <t t-else=''>
+                        <span class='detail client-contribution empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Validity</span>
+                    <t t-if='partner.card_validity || partner.principal_card_validity'>
+                        <span class='detail client-validity'><t t-esc='partner.card_validity || partner.principal_card_validity' /></span>
+                    </t>
+                    <t t-else=''>
+                        <span class='detail client-validity empty'>N/A</span>
+                    </t>
+                </div>
+                <div class='client-detail'>
+                    <span class='label'>Employer</span>
+                    <t t-if='partner.employer || partner.principal_employer'>
+                        <span class='detail client-employer'><t t-esc='partner.employer || partner.principal_employer'/></span>
+                    </t>
+                    <t t-else=''>
+                        <span class='detail client-employer empty'>N/A</span>
+                    </t>
+                </div>
+            </div>
+        </t>
+        <t t-jquery="div.client-details-right" t-operation="prepend">
+           <div class='client-detail'>
+                <span class='label'>Address</span>
+               <t t-if='partner.address'>
+                    <span class='detail client-address'><t t-esc='partner.address' /></span>
+                </t>
+               <t t-if='!partner.address'>
+                    <span class='detail client-address empty'>N/A</span>
+                </t>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>Email</span>
+                <t t-if='partner.email'>
+                    <span class='detail client-email'><t t-esc='partner.email' /></span>
+                </t>
+                <t t-if='!partner.email'>
+                    <span class='detail client-email empty'>N/A</span>
+                </t>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>Phone</span>
+                <t t-if='partner.phone'>
+                    <span class='detail client-phone'><t t-esc='partner.phone' /></span>
+                </t>
+                <t t-if='!partner.phone'>
+                    <span class='detail client-phone empty'>N/A</span>
+                </t>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="PaymentScreen-Paymentlines">
+        <t t-jquery="t[t-if='line.selected']" t-operation="replace">
+            <t t-if='line.selected'>
+                <tr class='paymentline selected'>
+                    <td class='col-due'> <t t-esc='widget.format_currency_no_symbol(order.get_due(line))' /> </td>
+                    <t t-if="line &amp;&amp; line.payment_status &amp;&amp; ['done', 'waitingCard', 'waiting', 'reversing', 'reversed'].includes(line.payment_status) || line.payment_method.is_assurance">
+                        <td class='col-tendered'>
+                            <t t-esc='widget.format_currency_no_symbol(line.get_amount())' />
+                        </td>
+                    </t>
+                    <t t-else="">
+                        <td class='col-tendered edit'>
+                            <t t-esc='widget.inputbuffer' />
+                        </td>
+                    </t>
+                    <t t-if='order.get_change(line)'>
+                        <td class='col-change highlight' >
+                            <t t-esc='widget.format_currency_no_symbol(order.get_change(line))' />
+                        </td>
+                    </t>
+                    <t t-if='!order.get_change(line)'>
+                        <td class='col-change' ></td>
+                    </t>
+
+                    <td class='col-name' > <t t-esc='line.payment_method.name' /> </td>
+                    <t t-if="line &amp;&amp; line.payment_status &amp;&amp; ['done', 'reversed', 'reversing'].includes(line.payment_status)">
+                        <td/>
+                    </t>
+                    <t t-else=''>
+                        <td class='delete-button' t-att-data-cid='line.cid' aria-label="Delete" title="Delete">
+                            <i class='fa fa-times-circle'/>
+                        </td>
+                    </t>
+
+                    <t t-if="line &amp;&amp; line.payment_status">
+                        <t t-call="PaymentScreenElectronicPayment"/>
+                    </t>
+                </tr>
+            </t>
+        </t>
+        <t t-jquery="col[class='controls']" t-operation="before">
+            <col class='insurance' />
+        </t>
+        <t t-jquery="tr[class='label']" t-operation="append">
+            <th></th>
+        </t>
+        <t t-jquery="td[class='delete-button']" t-operation="before">
+            <td t-if="line.payment_method.is_assurance" class='col-insurance'><span t-esc="widget.pos.assurance_company.name"/></td>
+            <td t-if="!line.payment_method.is_assurance" class='col-insurance'></td>
+        </t>
+    </t>
+
+    <t t-extend="PaymentScreenWidget">
+        <t t-jquery="div[class*='payment-buttons']" t-operation="append">
+            <t t-if='widget.pos.config.enable_rssb_card'>
+                <div class='button js_rssb_card'>
+                    <i class='fa fa-credit-card-alt' role="img" aria-label="RSSB Card" title="RSSB Card"/>
+                    <span class='left_button js_rssb_card'>
+                        RSSB
+                    </span>
+                </div>
+            </t>
+        </t>
+    </t>
+
+    <t t-name="RSSBCardPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-textinput rssb_card">
+                <p class="title">RSSB Card</p>
+                <t t-if="widget.pos.get_order()">
+                    <span>Due Amount : <t t-esc="widget.format_currency(widget.pos.get_order().get_due())"/></span>
+                </t>
+                <div>
+                    <table align="center" id="table_rssb">
+                        <tr>
+                            <td><input type="text" id="text_rssb_card_no" placeholder="RSSB Card Number"/></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="text_rssb_amount" placeholder="Enter Contribution (%)"/></td>
+                        </tr>
+                        <tr>
+                            <td><input type="date" id="rssb_expr_date" placeholder="Expiry Date"/></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="footer">
+                    <div class="button confirm">
+                        Apply
+                    </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-extend="ClientListScreenWidget">
+            <t t-jquery="table[class*='client-list']" t-operation="replace">
+            <table class='client-list'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <td>Assurance No</td>
+                    </tr>
+                </thead>
+                <tbody class='client-list-contents'>
+               </tbody>
+           </table>
+        </t>
+
+    </t>
+    <t t-extend="ClientLine">
+        <t t-jquery="tr[class*='client-line']" t-operation="append">
+            <td><t t-esc='partner.card_number or ""' /></td>
+        </t>
+    </t>
+</templates>
